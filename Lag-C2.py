@@ -22,14 +22,26 @@ class mail():
     def displayMail(self):
         print("contents")
         print(f"from {sender}")
-    def checkMail(self):
-        for x in self.mailbox:
-            if self.notification=='mailing':
-                displayMail()
-            elif self.notification=='friendRequest':
-                friendRequest()
+    def friendRequest(self,user):
+        print('you have recieved a friend request from {}'.format(self.sender))
+        answer=("Would you like to accept: ")
+        test=False
+        while test==False:
+            if answer=='yes':
+                user.friends.append(self.sender.username)
+                self.sender.friends.append(user.username)
+                print(f"{user.username} has become friends with {self.sender.username}")
+                test=True
+            elif answer=='no':
+                print("You have not accepted the request.")
+                test=True
             else:
-                pass
+                answer=input("yes or no: ")
+    def checkMail(self,user):
+        if self.notification=='friendRequest':
+            self.friendRequest(user)
+        else:
+            print("NOT IMPLEMENTED!")
 class user():
     def __init__(self,username,password):
         self.username=username
@@ -52,7 +64,7 @@ class user():
                         message=input("message: ")
                     else:
                         message=' '
-                    possibleFriend=mail('friendRequest',self.username,friend,message)
+                    possibleFriend=mail('friendRequest',self,friend,message)
                     send(possibleFriend)
                     found=True
                 else:
@@ -97,4 +109,6 @@ createNewUser()
 for x in userlist:
     print(x)
 userlist[0].addFriend()
-print(userlist[1].mailbox[0])
+for x in userlist[1].mailbox:
+    x.checkMail(userlist[1])
+print(userlist[0].friends)

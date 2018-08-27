@@ -1,35 +1,32 @@
 '''4 main tabs are as follows-Games near me, Communities, Friends and Profile '''
 userlist=[]
+def send(message):
+    found=False
+    for x in userlist:
+        if message.target==x.username:
+            x.mailbox.append(message)
+            found=True
+            print('message sent')
+        else:
+            pass
+    if found==False:
+        print("user not found")
 class mail():
-    def __init__(self,notification,sender,content=' '):
+    def __init__(self,notification,sender,target,content=' '):
         self.notification=notification
         self.content=content
         self.sender=sender
+        self.target=target
     def __str__(self):
-        return 'Its mail...'
+        return 'Message from {}'.format(self.sender)
     def displayMail(self):
         print("contents")
         print(f"from {sender}")
-    def friendRequest(self):
-        print('You have recieved a friend requeset from {}'.format(self.sender))
-        accept=input("would you like to accept: ")
-        test=True
-        while test:
-            if accept=='yes':
-                self.friends.append(sender)
-                sender.friends.append(self.username)
-                test=False
-            elif accept=='no':
-                denied=mail('mail',self.username,'Your request has been denied')
-                sender.mailbox.append(denied)
-                test=False
-            else:
-                accept=input("Yes or No: ")
     def checkMail(self):
         for x in self.mailbox:
             if self.notification=='mailing':
                 displayMail()
-            elif self.notification='friendRequest':
+            elif self.notification=='friendRequest':
                 friendRequest()
             else:
                 pass
@@ -49,7 +46,14 @@ class user():
         while found==False:
             for x in userlist:
                 if friend==x.username:
-                    self.friends.append(x)
+                    print("Would you like to send a message?")
+                    yes=input('Yes or No: ')
+                    if yes=='yes':
+                        message=input("message: ")
+                    else:
+                        message=' '
+                    possibleFriend=mail('friendRequest',self.username,friend,message)
+                    send(possibleFriend)
                     found=True
                 else:
                     pass
@@ -93,3 +97,4 @@ createNewUser()
 for x in userlist:
     print(x)
 userlist[0].addFriend()
+print(userlist[1].mailbox[0])
